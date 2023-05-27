@@ -59,7 +59,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
         {
             if(canget == true)
             {
-
+     
                 firsthitPoint = hitPointthing;
                 canget = false;
             }
@@ -67,13 +67,33 @@ public class PlaceObjectOnPlane : MonoBehaviour
         else if (Input.touchCount == 0)
         {
 
-            oldskamala = skamala;
+
             canget = true;
 
         }
 
 
+        if (Input.touchCount == 1)
+        {
 
+            spawnedObject.transform.rotation = Quaternion.Euler(spawnedObject.transform.rotation.eulerAngles.x, (Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f, 0);
+
+        }
+        else if (Input.touchCount == 2)
+        {
+            //skamala = oldskamala + ((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - 500f) / 1000f;
+            oldskamala = spawnedObject.transform.localScale.x;
+
+
+
+            skamala = oldskamala + (((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - Vector2.Distance(Input.GetTouch(0).rawPosition, Input.GetTouch(1).rawPosition)) / 20000f);
+
+            skamala = Mathf.Clamp(skamala, 0.1f, 1.9f);
+
+            thingamajig.GetComponent<TMP_Text>().text = " " + (oldskamala + (((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - Vector2.Distance(Input.GetTouch(0).rawPosition, Input.GetTouch(1).rawPosition)) / 20000f));
+
+            spawnedObject.transform.localScale = skamala * Vector3.one;
+        }
     }
 
 
@@ -101,7 +121,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
             {
                 // If there is an existing spawnedObject, we simply move its position
 
-                if (Vector2.Distance(firsthitPoint.position, spawnedObject.transform.position) > 0.2f)
+                if (Vector2.Distance(firsthitPoint.position, spawnedObject.transform.position) > 0.5f * spawnedObject.transform.localScale.x)
                 {
                     spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
                 }
@@ -109,21 +129,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
                 //thingamajig.GetComponent<TMP_Text>().text = (Vector2.Distance(firsthitPoint.position, hitPointthing.position) + " ");
 
-                if (Input.touchCount == 1)
-                {
-
-                    spawnedObject.transform.rotation = Quaternion.Euler(spawnedObject.transform.rotation.eulerAngles.x, (Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f, 0);
-
-                }
-                else if (Input.touchCount == 2)
-                {
-                    skamala = oldskamala + ((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - 500f) / 1000f;
-
-
-                    thingamajig.GetComponent<TMP_Text>().text = oldskamala + ((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - 500f) / 1000f + " ";
-
-                    spawnedObject.transform.localScale = skamala * Vector3.one;
-                }
+         
             }
 
 
