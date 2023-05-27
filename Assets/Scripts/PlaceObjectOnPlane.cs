@@ -42,7 +42,8 @@ public class PlaceObjectOnPlane : MonoBehaviour
     bool canget = false;
 
     float scamala;
-    float scamala2;
+
+    Vector3 savescale;
 
     private void Start()
     {
@@ -64,7 +65,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
         else if (Input.touchCount == 0)
         {
 
-
+            savescale = spawnedObject.transform.localScale;
             canget = true;
         }
 
@@ -81,15 +82,16 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
             scamala = (Input.GetTouch(0).position.y - Input.GetTouch(1).position.y) / 1000;
 
-
+            
             
 
-            thingamajig.GetComponent<TMP_Text>().text = " " + spawnedObject.transform.localScale.x + " ";
+
 
             scamala = Mathf.Clamp(scamala, 0.3f, 2f);
 
+            thingamajig.GetComponent<TMP_Text>().text = " " + spawnedObject.transform.localScale.x + " ";
 
-            spawnedObject.transform.localScale = Vector3.one * scamala;
+            spawnedObject.transform.localScale = savescale * scamala;
 
         }
 
