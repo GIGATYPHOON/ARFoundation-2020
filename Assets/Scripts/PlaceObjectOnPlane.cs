@@ -73,13 +73,13 @@ public class PlaceObjectOnPlane : MonoBehaviour
         }
 
 
-        if (Input.touchCount == 1)
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase== UnityEngine.TouchPhase.Moved)
         {
 
             spawnedObject.transform.rotation = Quaternion.Euler(spawnedObject.transform.rotation.eulerAngles.x, (Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f, 0);
 
         }
-        else if (Input.touchCount == 2)
+        else if (Input.touchCount == 2 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Moved && Input.GetTouch(1).phase == UnityEngine.TouchPhase.Moved)
         {
             //skamala = oldskamala + ((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - 500f) / 1000f;
             oldskamala = spawnedObject.transform.localScale.x;
@@ -121,9 +121,9 @@ public class PlaceObjectOnPlane : MonoBehaviour
             {
                 // If there is an existing spawnedObject, we simply move its position
 
-                if (Vector2.Distance(firsthitPoint.position, spawnedObject.transform.position) > 0.6f )
+                if (Vector2.Distance(firsthitPoint.position, spawnedObject.transform.position) > 0.2f && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Began && Input.touchCount == 1)
                 {
-                    spawnedObject.transform.SetPositionAndRotation(hitPoint.position, spawnedObject.transform.rotation);
+                    spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
                 }
 
 
