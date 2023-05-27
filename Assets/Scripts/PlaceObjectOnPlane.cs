@@ -36,8 +36,10 @@ public class PlaceObjectOnPlane : MonoBehaviour
     private GameObject thingamajig;
 
 
-    private Vector2 OldVect2;
+    Pose hitPointthing;
+    Pose firsthitPoint;
 
+    bool canget = false;
 
     private void Start()
     {
@@ -46,20 +48,44 @@ public class PlaceObjectOnPlane : MonoBehaviour
     }
 
 
+    private void Update()
+    {
+        if(Input.touchCount > 0)
+        {
+            if(canget == true)
+            {
+                firsthitPoint = hitPointthing;
+                canget = false;
+            }
+        }
+        else if (Input.touchCount == 0)
+        {
+
+
+            canget = true;
+        }
+
+        //thingamajig.GetComponent<TMP_Text>().text = (Vector2.Distance(firsthitPoint.position, hitPointthing.position) + " ");
+        thingamajig.GetComponent<TMP_Text>().text = (Vector2.Distance(hitPointthing.position, spawnedObject.transform.position) + " ");
+    }
+
 
     public void OnPlaceObject(InputValue value)
     {
         // Get the screen touch position
-        Vector2 touchPosition = value.Get<Vector2>();   
+        Vector2 touchPosition = value.Get<Vector2>();
 
-        
+
         // Perform a raycast from the touchPosition into the 3D scene to look for a plane
-        if(raycaster.Raycast(touchPosition, hits, UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon) && !IsPointOverUIObject(touchPosition))
+        if (raycaster.Raycast(touchPosition, hits, UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon) && !IsPointOverUIObject(touchPosition))
         {
             // Get the hit point (pose) on the plane
+
             Pose hitPoint = hits[0].pose;
+            hitPointthing = hitPoint;
+
             // Is this the first time we will place an object?
-            if(spawnedObject == null) 
+            if (spawnedObject == null) 
             {
                 // Instantiate our own prefab
                 spawnedObject = Instantiate(prefab, hitPoint.position, hitPoint.rotation);
@@ -68,32 +94,40 @@ public class PlaceObjectOnPlane : MonoBehaviour
             {
                 // If there is an existing spawnedObject, we simply move its position
 
-                var lookPos = hitPoint.position - spawnedObject.transform.position;
-                lookPos.y = 0;
+                //var lookPos = hitPoint.position - spawnedObject.transform.position;
+                //lookPos.y = 0;
 
-                spawnedObject.transform.rotation = Quaternion.LookRotation(lookPos);
-                spawnedObject.transform.Rotate(0, 180f, 0);
+                //spawnedObject.transform.rotation = Quaternion.LookRotation(lookPos);
+                //spawnedObject.transform.Rotate(0, 180f, 0);
+
+
+                if(Vector2.Distance(firsthitPoint.position, spawnedObject.transform.position) > 0.2f)
+                {
+                    spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
+                }
 
                 //if (tr)
-                //{
-
-
-                //}
-                //else
-                //{
-                //    //spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
-
-                //}
-
-
-
+                //
 
             }
+
+
+
+
+        }
+        else
+        {
+
+
+
         }
 
 
 
     }
+
+
+    
 
 
     public void IDKifthiswillwork(InputValue value)
