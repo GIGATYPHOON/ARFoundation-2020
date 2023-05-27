@@ -41,9 +41,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
     bool canget = false;
 
-    float scamala;
 
-    Vector3 savescale;
 
     private void Start()
     {
@@ -58,6 +56,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
         {
             if(canget == true)
             {
+
                 firsthitPoint = hitPointthing;
                 canget = false;
             }
@@ -65,35 +64,11 @@ public class PlaceObjectOnPlane : MonoBehaviour
         else if (Input.touchCount == 0)
         {
 
-            savescale = spawnedObject.transform.localScale;
+
             canget = true;
         }
 
-        //thingamajig.GetComponent<TMP_Text>().text = (Vector2.Distance(firsthitPoint.position, hitPointthing.position) + " ");
 
-        if (Input.touchCount == 1)
-        {
-
-            spawnedObject.transform.rotation = Quaternion.Euler(spawnedObject.transform.rotation.eulerAngles.x, (Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f, 0);
-
-        }
-        else if (Input.touchCount == 2)
-        {
-
-            scamala = (Input.GetTouch(0).position.y - Input.GetTouch(1).position.y) / 1000;
-
-            
-            
-
-
-
-            scamala = Mathf.Clamp(scamala, 0.3f, 2f);
-
-            thingamajig.GetComponent<TMP_Text>().text = " " + spawnedObject.transform.localScale.x + " ";
-
-            spawnedObject.transform.localScale = savescale * scamala;
-
-        }
 
     }
 
@@ -128,13 +103,26 @@ public class PlaceObjectOnPlane : MonoBehaviour
                 }
 
 
+                //thingamajig.GetComponent<TMP_Text>().text = (Vector2.Distance(firsthitPoint.position, hitPointthing.position) + " ");
+
+                if (Input.touchCount == 1)
+                {
+
+                    spawnedObject.transform.rotation = Quaternion.Euler(spawnedObject.transform.rotation.eulerAngles.x, (Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f, 0);
+
+                }
+                else if (Input.touchCount == 2)
+                {
 
 
+                    float scamala = spawnedObject.transform.localScale.y * ((Input.GetTouch(0).position.y - Input.GetTouch(1).position.y) - (Input.GetTouch(0).rawPosition.y - Input.GetTouch(1).rawPosition.y));
 
+                    scamala = Mathf.Clamp(scamala, 0.1f, 4f);
 
-                //if (tr)
-                //
+                    thingamajig.GetComponent<TMP_Text>().text = (Input.GetTouch(0).position.y - Input.GetTouch(1).position.y) - (Input.GetTouch(0).rawPosition.y - Input.GetTouch(1).rawPosition.y) + "";
 
+                    spawnedObject.transform.localScale = scamala * Vector3.one;
+                }
             }
 
 
