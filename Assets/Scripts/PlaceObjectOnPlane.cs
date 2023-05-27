@@ -121,9 +121,9 @@ public class PlaceObjectOnPlane : MonoBehaviour
             {
                 // If there is an existing spawnedObject, we simply move its position
 
-                if (Vector2.Distance(firsthitPoint.position, spawnedObject.transform.position) > 0.5f * spawnedObject.transform.localScale.x)
+                if (Vector2.Distance(firsthitPoint.position, spawnedObject.transform.position) > 0.6f )
                 {
-                    spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
+                    spawnedObject.transform.SetPositionAndRotation(hitPoint.position, spawnedObject.transform.rotation);
                 }
 
 
