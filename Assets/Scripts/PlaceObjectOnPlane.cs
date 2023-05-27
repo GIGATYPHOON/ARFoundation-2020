@@ -41,6 +41,9 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
     bool canget = false;
 
+    float scamala;
+    float scamala2;
+
     private void Start()
     {
         raycaster = GetComponent<ARRaycastManager>();
@@ -66,7 +69,30 @@ public class PlaceObjectOnPlane : MonoBehaviour
         }
 
         //thingamajig.GetComponent<TMP_Text>().text = (Vector2.Distance(firsthitPoint.position, hitPointthing.position) + " ");
-        thingamajig.GetComponent<TMP_Text>().text = (Vector2.Distance(hitPointthing.position, spawnedObject.transform.position) + " ");
+
+        if (Input.touchCount == 1)
+        {
+
+            spawnedObject.transform.rotation = Quaternion.Euler(spawnedObject.transform.rotation.eulerAngles.x, (Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f, 0);
+
+        }
+        else if (Input.touchCount == 2)
+        {
+
+            scamala = (Input.GetTouch(0).position.y - Input.GetTouch(1).position.y) / 1000;
+
+
+            
+
+            thingamajig.GetComponent<TMP_Text>().text = " " + spawnedObject.transform.localScale.x + " ";
+
+            scamala = Mathf.Clamp(scamala, 0.3f, 2f);
+
+
+            spawnedObject.transform.localScale = Vector3.one * scamala;
+
+        }
+
     }
 
 
@@ -94,17 +120,15 @@ public class PlaceObjectOnPlane : MonoBehaviour
             {
                 // If there is an existing spawnedObject, we simply move its position
 
-                //var lookPos = hitPoint.position - spawnedObject.transform.position;
-                //lookPos.y = 0;
-
-                //spawnedObject.transform.rotation = Quaternion.LookRotation(lookPos);
-                //spawnedObject.transform.Rotate(0, 180f, 0);
-
-
-                if(Vector2.Distance(firsthitPoint.position, spawnedObject.transform.position) > 0.2f)
+                if (Vector2.Distance(firsthitPoint.position, spawnedObject.transform.position) > 0.2f)
                 {
                     spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
                 }
+
+
+
+
+
 
                 //if (tr)
                 //
