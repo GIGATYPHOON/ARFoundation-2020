@@ -44,6 +44,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
     float skamala;
     float oldskamala;
 
+    float scaletimer = 10f;
 
     private void Start()
     {
@@ -72,6 +73,11 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
         }
 
+        scaletimer -= 100f * Time.deltaTime;
+        if (scaletimer <=0)
+        {
+            scaletimer = 0;
+        }
 
         if (Input.touchCount == 1 && Input.GetTouch(0).phase== UnityEngine.TouchPhase.Moved)
         {
@@ -90,9 +96,11 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
             skamala = Mathf.Clamp(skamala, 0.1f, 1.9f);
 
-            thingamajig.GetComponent<TMP_Text>().text = " " + (oldskamala + (((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - Vector2.Distance(Input.GetTouch(0).rawPosition, Input.GetTouch(1).rawPosition)) / 20000f));
+            thingamajig.GetComponent<TMP_Text>().text = " " + skamala;
 
             spawnedObject.transform.localScale = skamala * Vector3.one;
+
+            scaletimer = 10f;
         }
     }
 
@@ -121,9 +129,9 @@ public class PlaceObjectOnPlane : MonoBehaviour
             {
                 // If there is an existing spawnedObject, we simply move its position
 
-                if (Vector2.Distance(firsthitPoint.position, spawnedObject.transform.position) > 0.2f && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Began && Input.touchCount == 1)
+                if (Vector2.Distance(hitPoint.position, spawnedObject.transform.position) > 0.4f && scaletimer <= 0f)
                 {
-                    spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
+                    spawnedObject.transform.SetPositionAndRotation(firsthitPoint.position, hitPoint.rotation);
                 }
 
 
