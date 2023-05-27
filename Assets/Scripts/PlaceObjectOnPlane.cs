@@ -41,12 +41,15 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
     bool canget = false;
 
+    float skamala;
+    float oldskamala;
 
 
     private void Start()
     {
         raycaster = GetComponent<ARRaycastManager>();
         thingamajig.GetComponent<TMP_Text>().text = "varmit";
+        oldskamala = 1f;
     }
 
 
@@ -64,8 +67,9 @@ public class PlaceObjectOnPlane : MonoBehaviour
         else if (Input.touchCount == 0)
         {
 
-
+            oldskamala = skamala;
             canget = true;
+
         }
 
 
@@ -113,15 +117,12 @@ public class PlaceObjectOnPlane : MonoBehaviour
                 }
                 else if (Input.touchCount == 2)
                 {
+                    skamala = oldskamala + ((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - 500f) / 1000f;
 
 
-                    float scamala = spawnedObject.transform.localScale.y * ((Input.GetTouch(0).position.y - Input.GetTouch(1).position.y) - (Input.GetTouch(0).rawPosition.y - Input.GetTouch(1).rawPosition.y));
+                    thingamajig.GetComponent<TMP_Text>().text = oldskamala + ((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - 500f) / 1000f + " ";
 
-                    scamala = Mathf.Clamp(scamala, 0.1f, 4f);
-
-                    thingamajig.GetComponent<TMP_Text>().text = (Input.GetTouch(0).position.y - Input.GetTouch(1).position.y) - (Input.GetTouch(0).rawPosition.y - Input.GetTouch(1).rawPosition.y) + "";
-
-                    spawnedObject.transform.localScale = scamala * Vector3.one;
+                    spawnedObject.transform.localScale = skamala * Vector3.one;
                 }
             }
 
