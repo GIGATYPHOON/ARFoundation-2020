@@ -79,6 +79,10 @@ public class PlaceObjectOnPlane : MonoBehaviour
             scaletimer = 0;
         }
 
+
+        thingamajig.GetComponent<TMP_Text>().text = " " + scaletimer;
+
+
         if (Input.touchCount == 1 && Input.GetTouch(0).phase== UnityEngine.TouchPhase.Moved)
         {
 
@@ -96,7 +100,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
             skamala = Mathf.Clamp(skamala, 0.1f, 1.9f);
 
-            thingamajig.GetComponent<TMP_Text>().text = " " + skamala;
+
 
             spawnedObject.transform.localScale = skamala * Vector3.one;
 
