@@ -54,59 +54,6 @@ public class PlaceObjectOnPlane : MonoBehaviour
     }
 
 
-    private void Update()
-    {
-        if(Input.touchCount > 0)
-        {
-            if(canget == true)
-            {
-     
-                firsthitPoint = hitPointthing;
-                canget = false;
-            }
-        }
-        else if (Input.touchCount == 0)
-        {
-
-
-            canget = true;
-
-        }
-
-        scaletimer -= 100f * Time.deltaTime;
-        if (scaletimer <=0)
-        {
-            scaletimer = 0;
-        }
-
-
-        thingamajig.GetComponent<TMP_Text>().text = " " + scaletimer;
-
-
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase== UnityEngine.TouchPhase.Moved)
-        {
-
-            spawnedObject.transform.rotation = Quaternion.Euler(spawnedObject.transform.rotation.eulerAngles.x, (Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f, 0);
-
-        }
-        else if (Input.touchCount == 2 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Moved && Input.GetTouch(1).phase == UnityEngine.TouchPhase.Moved)
-        {
-            //skamala = oldskamala + ((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - 500f) / 1000f;
-            oldskamala = spawnedObject.transform.localScale.x;
-
-
-
-            skamala = oldskamala + (((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - Vector2.Distance(Input.GetTouch(0).rawPosition, Input.GetTouch(1).rawPosition)) / 20000f);
-
-            skamala = Mathf.Clamp(skamala, 0.1f, 1.9f);
-
-
-
-            spawnedObject.transform.localScale = skamala * Vector3.one;
-
-            scaletimer = 10f;
-        }
-    }
 
 
     public void OnPlaceObject(InputValue value)
@@ -133,7 +80,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
             {
                 // If there is an existing spawnedObject, we simply move its position
 
-                if (Vector2.Distance(hitPoint.position, spawnedObject.transform.position) > 0.4f && scaletimer <= 0f)
+                if (scaletimer <= 0f)
                 {
                     spawnedObject.transform.SetPositionAndRotation(firsthitPoint.position, hitPoint.rotation);
                 }
@@ -202,5 +149,63 @@ public class PlaceObjectOnPlane : MonoBehaviour
         EventSystem.current.RaycastAll(eventPosition, results);
 
         return results.Count > 0;
+    }
+
+
+
+
+    private void Update()
+    {
+        if (Input.touchCount > 0)
+        {
+            if (canget == true)
+            {
+
+                firsthitPoint = hitPointthing;
+                canget = false;
+            }
+        }
+        else if (Input.touchCount == 0)
+        {
+
+
+            canget = true;
+
+        }
+
+        scaletimer -= 10f * Time.deltaTime;
+        if (scaletimer <= 0)
+        {
+            scaletimer = 0;
+        }
+
+
+        thingamajig.GetComponent<TMP_Text>().text = " " + scaletimer;
+
+
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Moved)
+        {
+
+            spawnedObject.transform.rotation = Quaternion.Euler(spawnedObject.transform.rotation.eulerAngles.x, (Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f, 0);
+
+            scaletimer = 10f;
+        }
+        else if (Input.touchCount == 2 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Moved && Input.GetTouch(1).phase == UnityEngine.TouchPhase.Moved)
+        {
+            //skamala = oldskamala + ((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - 500f) / 1000f;
+            oldskamala = spawnedObject.transform.localScale.x;
+
+
+
+            skamala = oldskamala + (((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - Vector2.Distance(Input.GetTouch(0).rawPosition, Input.GetTouch(1).rawPosition)) / 20000f);
+
+            skamala = Mathf.Clamp(skamala, 0.1f, 1.9f);
+
+
+
+            spawnedObject.transform.localScale = skamala * Vector3.one;
+
+            scaletimer = 10f;
+        }
     }
 }
