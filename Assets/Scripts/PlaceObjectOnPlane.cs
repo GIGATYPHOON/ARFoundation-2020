@@ -46,12 +46,22 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
     float scaletimer = 10f;
 
-    private void Start()
+    [SerializeField]
+    private GameObject objectozoom;
+
+    void Start()
     {
+
+
+
         raycaster = GetComponent<ARRaycastManager>();
         thingamajig.GetComponent<TMP_Text>().text = "varmit";
         oldskamala = 1f;
     }
+
+
+
+
 
 
 
@@ -82,7 +92,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
                 if (scaletimer <= 0f)
                 {
-                    spawnedObject.transform.SetPositionAndRotation(firsthitPoint.position, hitPoint.rotation);
+                    spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
                 }
 
 
@@ -173,7 +183,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
         }
 
-        scaletimer -= 10f * Time.deltaTime;
+        scaletimer -= 9f * Time.deltaTime;
         if (scaletimer <= 0)
         {
             scaletimer = 0;
@@ -181,6 +191,10 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
 
         thingamajig.GetComponent<TMP_Text>().text = " " + scaletimer;
+
+
+
+
 
 
         if (Input.touchCount == 1 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Moved)
@@ -193,17 +207,16 @@ public class PlaceObjectOnPlane : MonoBehaviour
         else if (Input.touchCount == 2 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Moved && Input.GetTouch(1).phase == UnityEngine.TouchPhase.Moved)
         {
             //skamala = oldskamala + ((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - 500f) / 1000f;
-            oldskamala = spawnedObject.transform.localScale.x;
+            oldskamala = objectozoom.transform.localScale.x;
 
 
 
-            skamala = oldskamala + (((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - Vector2.Distance(Input.GetTouch(0).rawPosition, Input.GetTouch(1).rawPosition)) / 20000f);
+            skamala = oldskamala + (((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - Vector2.Distance(Input.GetTouch(0).rawPosition, Input.GetTouch(1).rawPosition)) / 2000f);
 
-            skamala = Mathf.Clamp(skamala, 0.1f, 1.9f);
+            skamala = Mathf.Clamp(skamala, 1f, 3f);
 
-
-
-            spawnedObject.transform.localScale = skamala * Vector3.one;
+            objectozoom.transform.localScale = skamala * Vector3.one;
+            //spawnedObject.transform.localScale = skamala * Vector3.one;
 
             scaletimer = 10f;
         }
