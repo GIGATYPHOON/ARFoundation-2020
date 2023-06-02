@@ -33,16 +33,15 @@ public class PlaceObjectOnPlane : MonoBehaviour
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
     [SerializeField]
-    private GameObject thingamajig;
+    private GameObject debugtext;
 
 
     Pose hitPointthing;
     Pose firsthitPoint;
 
-    bool canget = false;
 
-    float skamala;
-    float oldskamala;
+
+    float zoomscale;
 
     float scaletimer = 10f;
 
@@ -55,8 +54,8 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
 
         raycaster = GetComponent<ARRaycastManager>();
-        thingamajig.GetComponent<TMP_Text>().text = "varmit";
-        oldskamala = 1f;
+        debugtext.GetComponent<TMP_Text>().text = "Waiting";
+
     }
 
 
@@ -90,13 +89,13 @@ public class PlaceObjectOnPlane : MonoBehaviour
             {
                 // If there is an existing spawnedObject, we simply move its position
 
+
+                //scaletimer makes it so you don't TP the object as soon as you finish scaling
                 if (scaletimer <= 0f)
                 {
                     spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
                 }
 
-
-                //thingamajig.GetComponent<TMP_Text>().text = (Vector2.Distance(firsthitPoint.position, hitPointthing.position) + " ");
 
          
             }
@@ -119,14 +118,6 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
     
 
-
-    public void IDKifthiswillwork(InputValue value)
-    {
-
-
-    }
-
-
     public void RedTextureThing()
     {
         spawnedObject.transform.GetChild(0).GetComponent<MeshRenderer>().material = redshift;
@@ -144,7 +135,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
     }
 
 
-
+    //this makes it so pressing the buttons dont TP
     public bool IsPointOverUIObject(Vector2 pos)
     {
         if (EventSystem.current.IsPointerOverGameObject())
@@ -166,22 +157,6 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
     private void Update()
     {
-        if (Input.touchCount > 0)
-        {
-            if (canget == true)
-            {
-
-                firsthitPoint = hitPointthing;
-                canget = false;
-            }
-        }
-        else if (Input.touchCount == 0)
-        {
-
-
-            canget = true;
-
-        }
 
         scaletimer -= 9f * Time.deltaTime;
         if (scaletimer <= 0)
@@ -190,13 +165,13 @@ public class PlaceObjectOnPlane : MonoBehaviour
         }
 
 
-        thingamajig.GetComponent<TMP_Text>().text = " " + scaletimer;
+        debugtext.GetComponent<TMP_Text>().text = " " + scaletimer;
 
 
 
 
 
-
+        //this handles the sliding rotation
         if (Input.touchCount == 1 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Moved)
         {
 
@@ -204,19 +179,24 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
             scaletimer = 10f;
         }
+
+        //this handles the zooming thing
         else if (Input.touchCount == 2 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Moved && Input.GetTouch(1).phase == UnityEngine.TouchPhase.Moved)
         {
-            //skamala = oldskamala + ((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - 500f) / 1000f;
-            oldskamala = objectozoom.transform.localScale.x;
+
+    
 
 
+            //adds the distance difference between current fingers' positions and their positions when they first touched the screen, and adds it to the old scale. screen width  
+            zoomscale = objectozoom.transform.localScale.x + (((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - Vector2.Distance(Input.GetTouch(0).rawPosition, Input.GetTouch(1).rawPosition)) / Screen.height);
 
-            skamala = oldskamala + (((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - Vector2.Distance(Input.GetTouch(0).rawPosition, Input.GetTouch(1).rawPosition)) / 2000f);
 
-            skamala = Mathf.Clamp(skamala, 1f, 3f);
+            //oops! dont go below 1 or else you will get a magic mystery effect that screws with your head, and zoom 3 is close enough i guess
 
-            objectozoom.transform.localScale = skamala * Vector3.one;
-            //spawnedObject.transform.localScale = skamala * Vector3.one;
+            zoomscale = Mathf.Clamp(zoomscale, 1f, 3f);
+
+            objectozoom.transform.localScale = zoomscale * Vector3.one;
+
 
             scaletimer = 10f;
         }
