@@ -51,7 +51,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
 
         raycaster = GetComponent<ARRaycastManager>();
-        debugtext.GetComponent<TMP_Text>().text = "Waiting";
+        //debugtext.GetComponent<TMP_Text>().text = "Waiting";
 
     }
 
@@ -61,22 +61,68 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
 
 
+    //this is flawed because even without any changes it takes a drag to spawn an object, not a tap
+    //public void OnPlaceObject(InputValue value)
+    //{
+    //    // Get the screen touch position
+    //    Vector2 touchPosition = value.Get<Vector2>();
 
-    public void OnPlaceObject(InputValue value)
+
+    //    // Perform a raycast from the touchPosition into the 3D scene to look for a plane
+    //    if (raycaster.Raycast(touchPosition, hits, UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon) && !IsPointOverUIObject(touchPosition))
+    //    {
+    //        // Get the hit point (pose) on the plane
+
+    //        Pose hitPoint = hits[0].pose;
+
+    //        // Is this the first time we will place an object?
+    //        if (spawnedObject == null) 
+    //        {
+    //            // Instantiate our own prefab
+    //            spawnedObject = Instantiate(prefab, hitPoint.position, hitPoint.rotation);
+    //        }
+    //        else
+    //        {
+    //            // If there is an existing spawnedObject, we simply move its position
+
+
+    //            //scaletimer makes it so you don't TP the object as soon as you finish zooming or rotating
+    //            //pinchtimer is the same so you dont TP when you pinch
+    //            if (scaletimer <=0f && pinchtimer <=0f)
+    //            {
+    //                spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
+    //            }
+
+
+
+    //        }
+
+
+
+
+    //    }
+    //    else
+    //    {
+
+
+
+    //    }
+
+
+
+    //}
+
+
+    public void OnPlaceObject()
     {
-        // Get the screen touch position
-        Vector2 touchPosition = value.Get<Vector2>();
-
-
-        // Perform a raycast from the touchPosition into the 3D scene to look for a plane
-        if (raycaster.Raycast(touchPosition, hits, UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon) && !IsPointOverUIObject(touchPosition))
+        if (raycaster.Raycast(Input.GetTouch(0).position, hits, UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon) && !IsPointOverUIObject(Input.GetTouch(0).position))
         {
             // Get the hit point (pose) on the plane
 
             Pose hitPoint = hits[0].pose;
 
             // Is this the first time we will place an object?
-            if (spawnedObject == null) 
+            if (spawnedObject == null)
             {
                 // Instantiate our own prefab
                 spawnedObject = Instantiate(prefab, hitPoint.position, hitPoint.rotation);
@@ -88,32 +134,23 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
                 //scaletimer makes it so you don't TP the object as soon as you finish zooming or rotating
                 //pinchtimer is the same so you dont TP when you pinch
-                if (scaletimer <= 0f && pinchtimer <=0f)
+                if (scaletimer <= 0f && pinchtimer <= 0f)
                 {
                     spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
                 }
 
 
-         
+
             }
 
 
 
 
         }
-        else
-        {
-
-
-
-        }
-
-
-
     }
 
 
-    
+    //these are for the buttons
 
     public void RedTextureThing()
     {
@@ -176,9 +213,11 @@ public class PlaceObjectOnPlane : MonoBehaviour
             pinchtimer = 10f;
         }
 
+        OnPlaceObject();
 
+        //debugtext.GetComponent<TMP_Text>().text = " " + scaletimer + " " + pinchtimer;
 
-        debugtext.GetComponent<TMP_Text>().text = " " + scaletimer + " " + pinchtimer;
+        
 
 
         //this handles the sliding rotation

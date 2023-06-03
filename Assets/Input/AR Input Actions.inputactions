@@ -4,30 +4,8 @@
         {
             "name": "ARTouchActions",
             "id": "3ccc2c6d-53bf-4059-903a-e813679ab7d7",
-            "actions": [
-                {
-                    "name": "PlaceObject",
-                    "type": "Value",
-                    "id": "119048b8-e235-418a-8529-676190c6b892",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "59c69bef-8b49-417d-ad1c-26b406795287",
-                    "path": "<Touchscreen>/primaryTouch/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "PlaceObject",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
+            "actions": [],
+            "bindings": []
         }
     ],
     "controlSchemes": []
