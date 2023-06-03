@@ -36,14 +36,11 @@ public class PlaceObjectOnPlane : MonoBehaviour
     private GameObject debugtext;
 
 
-    Pose hitPointthing;
-    Pose firsthitPoint;
-
-
-
     float zoomscale;
 
     float scaletimer = 10f;
+
+    float pinchtimer = 10f;
 
     [SerializeField]
     private GameObject objectozoom;
@@ -77,7 +74,6 @@ public class PlaceObjectOnPlane : MonoBehaviour
             // Get the hit point (pose) on the plane
 
             Pose hitPoint = hits[0].pose;
-            hitPointthing = hitPoint;
 
             // Is this the first time we will place an object?
             if (spawnedObject == null) 
@@ -90,8 +86,9 @@ public class PlaceObjectOnPlane : MonoBehaviour
                 // If there is an existing spawnedObject, we simply move its position
 
 
-                //scaletimer makes it so you don't TP the object as soon as you finish scaling
-                if (scaletimer <= 0f)
+                //scaletimer makes it so you don't TP the object as soon as you finish zooming or rotating
+                //pinchtimer is the same so you dont TP when you pinch
+                if (scaletimer <= 0f && pinchtimer <=0f)
                 {
                     spawnedObject.transform.SetPositionAndRotation(hitPoint.position, hitPoint.rotation);
                 }
@@ -157,16 +154,27 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
     private void Update()
     {
+        
 
-        scaletimer -= 9f * Time.deltaTime;
+        scaletimer -= 35f * Time.deltaTime;
         if (scaletimer <= 0)
         {
             scaletimer = 0;
         }
 
 
-        debugtext.GetComponent<TMP_Text>().text = " " + scaletimer;
-
+        if(Input.touchCount == 1)
+        {
+            pinchtimer -= 80f * Time.deltaTime;
+            if (pinchtimer <= 0)
+            {
+                pinchtimer = 0;
+            }
+        }
+        else
+        {
+            pinchtimer = 10f;
+        }
 
 
 
@@ -191,7 +199,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
             zoomscale = objectozoom.transform.localScale.x + (((Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position)) - Vector2.Distance(Input.GetTouch(0).rawPosition, Input.GetTouch(1).rawPosition)) / Screen.height);
 
 
-            //oops! dont go below 1 or else you will get a magic mystery effect that screws with your head, and zoom 3 is close enough i guess
+            //oops! dont go below 1 or else you will get a magic mystery effect that screws with your head, and zoom 3 is close enough
 
             zoomscale = Mathf.Clamp(zoomscale, 1f, 3f);
 
@@ -200,5 +208,12 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
             scaletimer = 10f;
         }
+
+
+
+
+        debugtext.GetComponent<TMP_Text>().text = " " + scaletimer + " " + pinchtimer;
+
+
     }
 }
