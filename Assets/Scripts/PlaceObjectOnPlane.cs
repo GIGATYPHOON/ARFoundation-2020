@@ -178,17 +178,17 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
 
 
+        debugtext.GetComponent<TMP_Text>().text = " " + scaletimer + " " + pinchtimer;
+
 
         //this handles the sliding rotation
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Moved)
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Moved )
         {
 
             spawnedObject.transform.rotation = Quaternion.Euler(spawnedObject.transform.rotation.eulerAngles.x, (Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f, 0);
 
-            if(Mathf.Abs((Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f) > 15f)
-            {
-                scaletimer = 10f;
-            }
+
+            scaletimer = 10f;
 
         }
 
@@ -215,8 +215,6 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
 
 
-
-        debugtext.GetComponent<TMP_Text>().text = " " + scaletimer + " " + pinchtimer;
 
 
     }
