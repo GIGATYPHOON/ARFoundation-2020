@@ -154,7 +154,7 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
     private void Update()
     {
-        
+        //these handle the timers that disallow teleporting
 
         scaletimer -= 35f * Time.deltaTime;
         if (scaletimer <= 0)
@@ -185,7 +185,11 @@ public class PlaceObjectOnPlane : MonoBehaviour
 
             spawnedObject.transform.rotation = Quaternion.Euler(spawnedObject.transform.rotation.eulerAngles.x, (Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f, 0);
 
-            scaletimer = 10f;
+            if(Mathf.Abs((Input.GetTouch(0).position.x - Input.GetTouch(0).rawPosition.x) * 2f) > 15f)
+            {
+                scaletimer = 10f;
+            }
+
         }
 
         //this handles the zooming thing
