@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 844963460852228755}
   m_Layer: 0
-  m_Name: Wowzers
+  m_Name: TheModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
